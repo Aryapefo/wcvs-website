@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model BookingRequest {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Customer / requester
+  name      String
+  email     String
+  phone     String?
+
+  // Trip details
+  startDate DateTime
+  endDate   DateTime
+  pickupCity String?
+  groupSize Int?
+
+  useCase   String?  // e.g., Race weekend, Club ride, Trip
+  notes     String?
+
+  // Internal status tracking
+  status    BookingStatus @default(REQUESTED)
+}
+
+enum BookingStatus {
+  REQUESTED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
